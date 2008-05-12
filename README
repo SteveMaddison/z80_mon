@@ -1,0 +1,12 @@
+Z80 Monitor
+===========
+
+Steve Maddison, 12/05/2008
+
+This is a simple Z80 monitor written mainly in C. It implements the tradition
+low-level functionality such as reading from and writing to memory addresses,
+registers and I/O ports. Eventually it will also feature some simple diagnostics
+and bootstraps.
+
+To build you'll require the SDCC compiler and a hex2bin utility, both of which
+can be downloaded from SourceForge.
