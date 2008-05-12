@@ -1,5 +1,5 @@
-CC=sdcc -mz80
-CFLAGS=--stack-auto -I./
+CC=sdcc
+CFLAGS=-mz80 --nostdlib --nostdinc --stack-auto -I./
 
 AS=as-z80
 ASFLAGS=-plosgff
@@ -11,8 +11,8 @@ CODE_ADDR=0x0000
 DATA_ADDR=0x4000
 STACK_ADDR=0xffff
 
-LD=sdcc -mz80
-LDFLAGS=--code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
+LD=$(CC)
+LDFLAGS=-mz80 --nooverlay --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
 
 # The hex2bin util used to convert our ihx file to a binary
 HEX2BIN=hex2bin
@@ -49,7 +49,7 @@ clean:
 	rm -f $(OBJS) $(ASMJUNK) $(CJUNK) $(DEPS) monitor.*
 
 monitor.bin: monitor.ihx
-	$(HEX2BIN) $(H2BFLAGS) monitor.ihx > /dev/null
+	$(HEX2BIN) $(H2BFLAGS) monitor.ihx | grep '='
 
 monitor.ihx: $(OBJS)
 	$(LD) $(LDFLAGS) -o monitor $^

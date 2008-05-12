@@ -1,5 +1,4 @@
 #include "config.h"
-#include "errno.h"
 #include "types.h"
 #include "uart.h"
 #include "util.h"
@@ -20,18 +19,17 @@
 #define REG_IR		6
 #define REG_SP		7
 #define NO_REGS		8
-int reg[NO_REGS];
 
 /* Maximum number of units supported by bootstraps */
 #define MAX_UNIT	8
 
-/* Cheap intetface to RAM - must be declared first! */
-unsigned char *mem = 0;
-
 /* Constants */
-const char *program = "Cosam 3z Monitor";
-const char *version = "0.1";
-const char digits[] = "0123456789abcdef";
+static const char *program = "Cosam 3z Monitor";
+static const char *version = "0.1";
+static const char digits[] = "0123456789abcdef";
+
+/* Cheap intetface to RAM - do not initialise yet. */
+static unsigned char *mem;
 
 unsigned char con_getc( void ) {
 	return uart_getc();
@@ -140,6 +138,16 @@ int reg_lookup( char* name ) {
 	}
 }
 
+void set_reg( int reg_id, addr_t value ) {
+	UNUSED(reg_id);
+	UNUSED(value);	
+}
+
+addr_t get_reg( int reg_id ) {
+	UNUSED(reg_id);
+	return 0;
+}
+
 void mem_test( void ) {
 	return;
 }
@@ -197,7 +205,9 @@ int main() {
 	int addr = 0;
 	int reg_id = 0;
 	word_t value = 0;
-		
+	
+	mem = 0;
+	
 	con_crlf();
 	con_puts(program);
 	con_puts(" v");
@@ -273,7 +283,7 @@ int main() {
 					else if( mode == MODE_REG ) {
 						if( *param ) {
 							int value = number( param, 16 );
-							reg[reg_id] = value;
+							set_reg(reg_id, value);
 						}
 						done = 1;
 					}
@@ -318,7 +328,7 @@ int main() {
 						done = 1;
 					}
 					else {
-						con_putaddr( reg[reg_id] );
+						con_putaddr( get_reg(reg_id) );
 						con_putc(' ');
 						mode = MODE_REG;
 					}

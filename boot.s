@@ -21,7 +21,7 @@
 ;  function code
 ;-----------------
 	.area _CODE
-
+_boot::
 ; These are the very first instructions executed when the machine is
 ; powered up or reset.
 	di				; disable interrupts
