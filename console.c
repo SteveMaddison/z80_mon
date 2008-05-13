@@ -2,6 +2,8 @@
 #include "uart.h"
 #include "util.h"
 
+static const char digits[] = "0123456789abcdef";
+
 unsigned char con_getc( void ) {
 	return uart_getc();
 }
@@ -31,4 +33,45 @@ void con_puts( const char *s ) {
 
 void con_crlf( void ) {
 	con_putc('\n');
+}
+
+/* Simple string to number converter */
+int number( const char *string, int base ) {
+	char *c = string;
+	int result = 0;
+	char negative = 0;
+	
+	if( base > 16 )
+		return 0;
+		
+	while( *c == ' ' )
+		c++;
+		
+	if( *c == '-' )
+		negative = 1;
+		
+	while( *c != 0 ) {
+		int digit = 0;
+		if( *c >= '0' && *c <= '9' ) {
+			digit = *c - '0';
+		}
+		else if( *c >= 'a' && *c <= 'f' ) {
+			digit = 10 + *c - 'a';	
+		}
+		else {
+			/* invalid char */
+			return 0;
+		}
+		if( digit > base - 1 ) {
+			/* char out of range for number base */
+			return 0;	
+		}
+		result = (result * base) + digit;
+		c++;
+	}
+	
+	if( negative )
+		result = -result;
+		
+	return result;
 }

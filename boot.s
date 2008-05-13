@@ -59,25 +59,6 @@ _inb::
 	ret
 
 ;----------------------------------------------------
-; void get_regs( void );
-;
-; fill array with values of registers
-;----------------------------------------------------
-_get_reg::
-	; first, save all registers' values
-	push	iy
-	push	ix
-	push	hl
-	push	de
-	push	bc
-	push	af
-	ld	b,#6
-_get_regs_loop:
-	pop	hl	
-	djnz	_get_reg_loop
-	ret
-
-;----------------------------------------------------
 ; void jump( addr_t addr );
 ;
 ; unconditionally jump to <addr>

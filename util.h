@@ -6,8 +6,6 @@
 /* used to prevent compiler warnings */
 #define UNUSED(x) (x)=(x)
 
-extern static const char *digits;
-
 extern void outb( const char port, const char byte );
 extern unsigned char inb( const char port );
 extern size_t* get_sp( void );

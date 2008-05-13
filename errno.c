@@ -9,8 +9,8 @@ const char* strerr( int err )
 	switch( err ) {
 		case ENOUNIT:
 			return "No such unit";
-		case ETIMEOUT:
-			return "Timeout";		
+		case EINTERNAL:
+			return "Internal error";		
 	}
 	return "Unknown error";
 }
