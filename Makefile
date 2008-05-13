@@ -10,6 +10,7 @@ ARFLAGS=-cr
 CODE_ADDR=0x0000
 DATA_ADDR=0x4000
 STACK_ADDR=0xffff
+IMAGE_SIZE=16
 
 LD=$(CC)
 LDFLAGS=-mz80 --nooverlay --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
@@ -48,8 +49,11 @@ all: monitor.bin
 clean:
 	rm -f $(OBJS) $(ASMJUNK) $(CJUNK) $(DEPS) monitor.*
 
-monitor.bin: monitor.ihx
-	$(HEX2BIN) $(H2BFLAGS) monitor.ihx | grep '='
+monitor.bin: monitor.tmp
+	dd if=$< of=$@ bs=1024 count=$(IMAGE_SIZE) conv=sync
+
+monitor.tmp: monitor.ihx
+	$(HEX2BIN) $(H2BFLAGS) -e tmp $< | grep '='
 
 monitor.ihx: $(OBJS)
 	$(LD) $(LDFLAGS) -o monitor $^
