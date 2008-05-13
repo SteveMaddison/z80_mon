@@ -11,16 +11,18 @@ ARFLAGS=-cr
 CODE_ADDR=0x0000
 DATA_ADDR=0x4000
 STACK_ADDR=0xffff
+# Resulting image file will be this many * 1024 bytes
 IMAGE_SIZE=16
 
 LD=$(CC)
-LDFLAGS=$(GFLAGS) --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
+LDFLAGS=$(GFLAGS) --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) \
+ --stack-loc $(STACK_ADDR)
 
 # The hex2bin util used to convert our ihx file to a binary
 HEX2BIN=hex2bin
 H2BFLAGS=-s $(CODE_ADDR)
 
-.SUFFIXES: .a .asm .bin .c .d .ihx .o
+.SUFFIXES: .asm .bin .c .d .ihx .o
 
 # Compile C files into object files, taking dependencies into account.
 %.o: %.c %.d
@@ -51,6 +53,10 @@ all: monitor.bin
 clean:
 	rm -f $(OBJS) $(ASMJUNK) $(CJUNK) $(DEPS) monitor.*
 
+dep: $(DEPS)
+
+# The superfluous areas beginning at $(DATA_ADDR) result in an oversized
+# image, padded out by hex2bin. Here the extra chunk is chopped off.
 monitor.bin: monitor.tmp
 	dd if=$< of=$@ bs=1024 count=$(IMAGE_SIZE) conv=sync
 

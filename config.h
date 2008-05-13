@@ -20,6 +20,7 @@ typedef unsigned int regpair_t;
 typedef unsigned char word_t;
 typedef unsigned char reg_t;
 
+/* Base addresses of devices */
 #define UART_ADDR 0x20
 #define ATA_ADDR 0x40
 
