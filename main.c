@@ -1,6 +1,7 @@
+#include "ata.h"
 #include "config.h"
+#include "console.h"
 #include "types.h"
-#include "uart.h"
 #include "util.h"
 
 #define CLI_BUFFER_LENGTH 32
@@ -16,9 +17,7 @@
 #define REG_HL		3
 #define REG_IX		4
 #define REG_IY		5
-#define REG_IR		6
-#define REG_SP		7
-#define NO_REGS		8
+#define NO_REGS		6
 
 /* Maximum number of units supported by bootstraps */
 #define MAX_UNIT	8
@@ -26,41 +25,9 @@
 /* Constants */
 static const char *program = "Cosam 3z Monitor";
 static const char *version = "0.1";
-static const char digits[] = "0123456789abcdef";
 
-/* Cheap intetface to RAM - do not initialise yet. */
-static unsigned char *mem;
-
-unsigned char con_getc( void ) {
-	return uart_getc();
-}
-
-void con_putc( unsigned char c ) {
-	uart_putc( c );
-}
-
-void con_putaddr( addr_t a ) {
-	con_putc( digits[ a & 0xf000 >> 12 ] );
-	con_putc( digits[ a & 0x0f00 >> 8 ] );
-	con_putc( digits[ a & 0x00f0 >> 4 ] );
-	con_putc( digits[ a & 0x000f ] );
-}
-
-void con_putword( unsigned char c ) {
-	con_putc( digits[ c & 0xf0 >> 4 ] );
-	con_putc( digits[ c & 0x0f ] );
-}
-
-void con_puts( const char *s ) {
-	char *pos = (char*)s;
-	while( *pos ) {
-		con_putc( *pos++ );
-	}
-}
-
-void con_crlf( void ) {
-	con_putc('\n');
-}
+/* Cheap interface to memory... */
+static unsigned char *mem = 0;
 
 int number( const char *string, int base ) {
 	/* Simple string to number converter */
@@ -103,11 +70,6 @@ int number( const char *string, int base ) {
 	return result;
 }
 
-void boot_ata( int unit ) {
-	UNUSED(unit);
-	return;
-}
-
 int reg_lookup( char* name ) {
 	if( !strcmp( name, "af" ) ) {
 		return REG_AF;
@@ -126,12 +88,6 @@ int reg_lookup( char* name ) {
 	}
 	else if( !strcmp( name, "iy" ) ) {
 		return REG_IY;
-	}
-	else if( !strcmp( name, "ir" ) ) {
-		return REG_IR;
-	}
-	else if( !strcmp( name, "sp" ) ) {
-		return REG_SP;
 	}
 	else {
 		return NO_REGS;
@@ -160,7 +116,7 @@ void run_cmd( const char* cmd, const char *param ) {
 			unit = number( param, 10 );
 		}
 		if( unit < MAX_UNIT ) {
-			boot_ata( unit );
+			ata_boot( unit );
 		}
 		else {
 			con_puts("Bad unit\n");
@@ -205,8 +161,6 @@ int main() {
 	int addr = 0;
 	int reg_id = 0;
 	word_t value = 0;
-	
-	mem = 0;
 	
 	con_crlf();
 	con_puts(program);

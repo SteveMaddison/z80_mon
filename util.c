@@ -1,5 +1,7 @@
 #include "util.h"
 
+static const char *digits = "0123456789abcdef";
+
 void *memcpy( void *dest, const void *src, size_t n )
 {
 	char *d = dest;
