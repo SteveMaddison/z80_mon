@@ -10,11 +10,8 @@
 #define MAX_UNIT	8
 
 /* Constants */
-static const char *program = "Cosam 3z Monitor";
-static const char *version = "0.1";
-
-/* Cheap interface to memory... */
-static word_t *mem = 0;
+static const char program[] = "Cosam 3z Monitor";
+static const char version[] = "0.1";
 
 int reg_lookup( char* name ) {
 	if( !strcmp( name, "af" ) ) {
@@ -107,7 +104,7 @@ int main() {
 	addr_t addr = 0;
 	reg_id_t reg_id = 0;
 	word_t value = 0;
-	
+
 	con_crlf();
 	con_puts(program);
 	con_puts(" v");
@@ -138,7 +135,7 @@ int main() {
 						con_putaddr( addr );
 						if( mode == MODE_ADDR ) {
 							con_putc('/');
-							con_putword( mem[addr] );
+							con_putword( *(word_t*)addr );
 						}
 						else {
 							con_putc('@');
@@ -162,7 +159,7 @@ int main() {
 						if( *param ) {
 							addr_t value = number( param, 16 );
 							if( mode == MODE_ADDR ) {
-								mem[addr] = value;
+								*(word_t*)addr = value;
 							}
 							else {
 								value &= 0x00ff;
@@ -173,7 +170,7 @@ int main() {
 						con_putaddr( addr );
 						if( mode == MODE_ADDR ) {
 							con_putc('/');
-							con_putword( mem[addr] );
+							con_putword( *(word_t*)addr );
 						}
 						else {
 							con_putc('@');
@@ -209,7 +206,7 @@ int main() {
 					addr = number( cli_buffer, 16 );
 					con_putc(c);
 					if( c == '/' ) {
-						con_putword( mem[addr] );
+						con_putword( *(word_t*)addr );
 						mode = MODE_ADDR;
 					}
 					else {

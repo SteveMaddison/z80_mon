@@ -4,16 +4,18 @@
 /*
  * 16Kb ROM at 0x0000
  */
-#define ROM_START		0x0000
-#define ROM_SIZE		0x4000
-#define ROM_END			((ROM_START)+(ROM_SIZE)-1)
+#define ROM_START	0x0000
+#define ROM_SIZE	0x4000
+#define ROM_END		((ROM_START)+(ROM_SIZE)-1)
 
 /*
  * RAM starts at 0x4000
  */
-#define RAM_SIZE		0xc000	/* 48Kb */
-#define RAM_START		0x4000
-#define RAM_END			((RAM_START)+(RAM_SIZE)-1)
+#define RAM_SIZE	0xc000	/* 48Kb */
+#define RAM_START	0x4000
+#define RAM_END		((RAM_START)+(RAM_SIZE)-1)
+
+#define MEM_SIZE	0xffff
 
 typedef unsigned int addr_t;
 typedef unsigned int regpair_t;
