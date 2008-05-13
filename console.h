@@ -3,6 +3,7 @@
 
 #include "types.h"
 
+void con_init( void );
 unsigned char con_getc( void );
 void con_putc( unsigned char c );
 void con_putaddr( addr_t a );

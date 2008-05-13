@@ -4,11 +4,6 @@
 #include "types.h"
 #include "util.h"
 
-#define CLI_BUFFER_LENGTH 32
-
-/* Maximum number of units supported by bootstraps */
-#define MAX_UNIT	8
-
 /* Constants */
 static const char program[] = "Cosam 3z Monitor";
 static const char version[] = "0.1";
@@ -105,6 +100,7 @@ int main() {
 	reg_id_t reg_id = 0;
 	word_t value = 0;
 
+	con_init();
 	con_crlf();
 	con_puts(program);
 	con_puts(" v");
@@ -250,4 +246,3 @@ int main() {
 		}
 	}
 }
-

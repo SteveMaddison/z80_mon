@@ -4,6 +4,10 @@
 
 static const char digits[] = "0123456789abcdef";
 
+void con_init( void ) {
+	uart_init();
+}
+
 unsigned char con_getc( void ) {
 	return uart_getc();
 }

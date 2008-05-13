@@ -11,8 +11,8 @@ ARFLAGS=-cr
 CODE_ADDR=0x0000
 DATA_ADDR=0x4000
 STACK_ADDR=0xffff
-# Resulting image file will be this many * 1024 bytes
-IMAGE_SIZE=16
+# Resulting image file will be this many bytes
+IMAGE_SIZE=$(shell printf %d $(DATA_ADDR))
 
 LD=$(CC)
 LDFLAGS=$(GFLAGS) --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) \
@@ -55,10 +55,8 @@ clean:
 
 dep: $(DEPS)
 
-# The superfluous areas beginning at $(DATA_ADDR) result in an oversized
-# image, padded out by hex2bin. Here the extra chunk is chopped off.
 monitor.bin: monitor.tmp
-	dd if=$< of=$@ bs=1024 count=$(IMAGE_SIZE) conv=sync
+	dd if=$< of=$@ bs=$(IMAGE_SIZE) count=1 conv=sync
 
 monitor.tmp: monitor.ihx
 	$(HEX2BIN) $(H2BFLAGS) -e tmp $< | grep '='

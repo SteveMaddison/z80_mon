@@ -22,6 +22,12 @@ typedef unsigned int regpair_t;
 typedef unsigned char word_t;
 typedef unsigned char reg_t;
 
+/* Maximum number of characters the CLI will accept */
+#define CLI_BUFFER_LENGTH 32
+
+/* Maximum number of units supported by bootstraps */
+#define MAX_UNIT 8
+
 /* Base addresses of devices */
 #define UART_ADDR 0x20
 #define ATA_ADDR 0x40
