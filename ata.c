@@ -69,6 +69,7 @@ int ata_sector_read( const char *buffer, ssize_t addr ) {
 	/* read in the block (256 words) */
 	outb( ATA_CONTROL, ATA_REG_DATA );
 	for( i = 256 ; i > 0 ; i-- ) {
+		/* watch byte order... */
 		*pos++ = inb( ATA_DATA_MSB );
 		*pos++ = inb( ATA_DATA_LSB );
 	}
@@ -96,7 +97,6 @@ void ata_boot( int unit ) {
 		errno = EINTERNAL;
 	}
 	else {
-		errno = 0;
 		jump( RAM_START );
 	}
 }

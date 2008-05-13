@@ -16,8 +16,11 @@
 #define RAM_END			((RAM_START)+(RAM_SIZE)-1)
 
 typedef unsigned int addr_t;
+typedef unsigned int regpair_t;
 typedef unsigned char word_t;
+typedef unsigned char reg_t;
 
 #define UART_ADDR 0x20
+#define ATA_ADDR 0x40
 
 #endif /* _CONFIG_H_ */

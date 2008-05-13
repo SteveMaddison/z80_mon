@@ -19,12 +19,12 @@ void con_putaddr( addr_t a ) {
 	con_putc( digits[ a & 0x000f ] );
 }
 
-void con_putword( unsigned char c ) {
+void con_putword( word_t c ) {
 	con_putc( digits[ c & 0xf0 >> 4 ] );
 	con_putc( digits[ c & 0x0f ] );
 }
 
-void con_puts( const char *s ) {
+void con_puts( unsigned char *s ) {
 	char *pos = (char*)s;
 	while( *pos ) {
 		con_putc( *pos++ );

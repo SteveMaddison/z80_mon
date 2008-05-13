@@ -6,19 +6,6 @@
 
 #define CLI_BUFFER_LENGTH 32
 
-#define MODE_NONE	0
-#define MODE_ADDR	1
-#define MODE_REG	2
-#define MODE_PORT	3
-
-#define REG_AF		0
-#define REG_BC		1
-#define REG_DE		2
-#define REG_HL		3
-#define REG_IX		4
-#define REG_IY		5
-#define NO_REGS		6
-
 /* Maximum number of units supported by bootstraps */
 #define MAX_UNIT	8
 
@@ -27,7 +14,7 @@ static const char *program = "Cosam 3z Monitor";
 static const char *version = "0.1";
 
 /* Cheap interface to memory... */
-static unsigned char *mem = 0;
+static word_t *mem = 0;
 
 int reg_lookup( char* name ) {
 	if( !strcmp( name, "af" ) ) {
@@ -53,12 +40,12 @@ int reg_lookup( char* name ) {
 	}
 }
 
-void set_reg( int reg_id, addr_t value ) {
+void set_reg( reg_id_t reg_id, addr_t value ) {
 	UNUSED(reg_id);
 	UNUSED(value);	
 }
 
-addr_t get_reg( int reg_id ) {
+regpair_t get_reg( reg_id_t reg_id ) {
 	UNUSED(reg_id);
 	return 0;
 }
@@ -99,8 +86,8 @@ void run_cmd( const char* cmd, const char *param ) {
 	else if( !strcmp( cmd, "go" ) ) {
 		/* run, param is address */
 		if( param ) {
-			int addr = number( param, 16 );
-			/* jmp $addr */
+			addr_t addr = number( param, 16 );
+			jump( addr );
 		}
 		else {
 			con_puts("Bad address\n");
@@ -117,8 +104,8 @@ void run_cmd( const char* cmd, const char *param ) {
 
 int main() {
 	char cli_buffer[CLI_BUFFER_LENGTH];
-	int addr = 0;
-	int reg_id = 0;
+	addr_t addr = 0;
+	reg_id_t reg_id = 0;
 	word_t value = 0;
 	
 	con_crlf();
@@ -131,7 +118,7 @@ int main() {
 	for(;;) {
 		char *pos = &cli_buffer[0];
 		char *param = NULL;
-		char mode = MODE_NONE;
+		mode_t mode = MODE_NONE;
 		char done = 0;
 		
 		con_puts("# ");
@@ -173,11 +160,12 @@ int main() {
 					con_crlf();
 					if( mode == MODE_ADDR || mode == MODE_PORT ) {
 						if( *param ) {
-							int value = number( param, 16 );
+							addr_t value = number( param, 16 );
 							if( mode == MODE_ADDR ) {
 								mem[addr] = value;
 							}
 							else {
+								value &= 0x00ff;
 								outb(addr, (char)value);
 							}
 						}
@@ -195,7 +183,7 @@ int main() {
 					}
 					else if( mode == MODE_REG ) {
 						if( *param ) {
-							int value = number( param, 16 );
+							reg_t value = number( param, 16 );
 							set_reg(reg_id, value);
 						}
 						done = 1;
@@ -262,7 +250,6 @@ int main() {
 					}
 					break;
 			}
-			
 		}
 	}
 }

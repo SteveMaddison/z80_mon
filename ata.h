@@ -4,9 +4,10 @@
 /* The ATA interface makes use of three I/O ports; two for the 16-bit ATA
  * data bus and one for the remaining address and CS signals (referred to
  * here as the "control" port). */
-#define ATA_DATA_LSB	0x40
-#define ATA_DATA_MSB	0x41
-#define ATA_CONTROL	0x42
+/* ATA_ADDR defined in config.h */
+#define ATA_DATA_LSB	(ATA_ADDR)
+#define ATA_DATA_MSB	((ATA_ADDR)+1)
+#define ATA_CONTROL	((ATA_ADDR)+2)
 
 /* ATA Regsiters (values for the control port)
  * Bit 0-2 = Addr0-2, Bit 3 = /CS0, Bit 4 = /CS1 */

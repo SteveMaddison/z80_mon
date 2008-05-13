@@ -38,7 +38,8 @@ SRCS=$(shell ls *.c 2> /dev/null)
 COBJS=$(SRCS:.c=.o)
 DEPS=$(SRCS:.c=.d)
 CJUNK=$(SRCS:.c=.asm) $(SRCS:.c=.lst) $(SRCS:.c=.sym)
-ASMSRCS=$(shell ls *.s 2> /dev/null)
+# boot.o must come first here
+ASMSRCS=boot.s
 ASMOBJS=$(ASMSRCS:.s=.o)
 ASMJUNK=$(ASMSRCS:.s=.lst) $(ASMSRCS:.s=.sym) $(ASMSRCS:.s=.lnk)
 
