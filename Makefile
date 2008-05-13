@@ -1,5 +1,6 @@
 CC=sdcc
-CFLAGS=-mz80 --nostdlib --nostdinc --stack-auto -I./
+GFLAGS=-mz80 --nooverlay
+CFLAGS=$(GFLAGS) --nostdlib --nostdinc --stack-auto -I./
 
 AS=as-z80
 ASFLAGS=-plosgff
@@ -13,7 +14,7 @@ STACK_ADDR=0xffff
 IMAGE_SIZE=16
 
 LD=$(CC)
-LDFLAGS=-mz80 --nooverlay --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
+LDFLAGS=$(GFLAGS) --no-std-crt0 --code-loc $(CODE_ADDR) --data-loc $(DATA_ADDR) --stack-loc $(STACK_ADDR)
 
 # The hex2bin util used to convert our ihx file to a binary
 HEX2BIN=hex2bin
@@ -39,7 +40,7 @@ COBJS=$(SRCS:.c=.o)
 DEPS=$(SRCS:.c=.d)
 CJUNK=$(SRCS:.c=.asm) $(SRCS:.c=.lst) $(SRCS:.c=.sym)
 # boot.o must come first here
-ASMSRCS=boot.s
+ASMSRCS=boot.s asm_util.s
 ASMOBJS=$(ASMSRCS:.s=.o)
 ASMJUNK=$(ASMSRCS:.s=.lst) $(ASMSRCS:.s=.sym) $(ASMSRCS:.s=.lnk)
 

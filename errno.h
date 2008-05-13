@@ -1,12 +1,9 @@
 #ifndef _ERRNO_H_
 #define _ERRNO_H_
 
-
 /* devices */
 #define ENOUNIT		0x20	/* no such unit */
 #define EINTERNAL	0x21	/* device-specific error */
-
-extern int errno;
 
 extern const char* strerr( int err );
 

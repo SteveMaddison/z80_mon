@@ -86,7 +86,10 @@ void ata_boot( int unit ) {
 			ata_config( ATA_CONFIG_SLAVE );
 			break;
 		default:
-			errno = ENOUNIT;
+			con_crlf();
+			con_puts( strerr(ENOUNIT) );
+			con_crlf();
+			con_crlf();
 			return;
 	}
 	if( err = ata_sector_read( RAM_START, 0 ) ) {
@@ -94,7 +97,6 @@ void ata_boot( int unit ) {
 		con_puts( ata_err_str(err) );
 		con_crlf();
 		con_crlf();
-		errno = EINTERNAL;
 	}
 	else {
 		jump( RAM_START );
