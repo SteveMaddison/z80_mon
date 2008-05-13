@@ -13,19 +13,22 @@ unsigned char con_getc( void ) {
 }
 
 void con_putc( unsigned char c ) {
+	if( c == '\n' ) {
+		uart_putc( '\r' );
+	}
 	uart_putc( c );
 }
 
 void con_putaddr( addr_t a ) {
-	con_putc( digits[ a & 0xf000 >> 12 ] );
-	con_putc( digits[ a & 0x0f00 >> 8 ] );
-	con_putc( digits[ a & 0x00f0 >> 4 ] );
-	con_putc( digits[ a & 0x000f ] );
+	con_putc( digits[ (a & 0xf000) >> 12 ] );
+	con_putc( digits[ (a & 0x0f00) >> 8 ] );
+	con_putc( digits[ (a & 0x00f0) >> 4 ] );
+	con_putc( digits[ (a & 0x000f) ] );
 }
 
 void con_putword( word_t c ) {
-	con_putc( digits[ c & 0xf0 >> 4 ] );
-	con_putc( digits[ c & 0x0f ] );
+	con_putc( digits[ (c & 0xf0) >> 4 ] );
+	con_putc( digits[ (c & 0x0f) ] );
 }
 
 void con_puts( unsigned char *s ) {

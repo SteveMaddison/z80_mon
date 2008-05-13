@@ -12,14 +12,14 @@ void uart_init( void ) {
 
 unsigned char uart_getc( void ) {
 	/* wait until UART has a character */
-	while( !(inb(UART_LSR) && 0x01) );
+	while( !(inb(UART_LSR) & 0x01) );
 	/* read character and return */
 	return inb(UART_RBR);
 }
 
 void uart_putc( unsigned char c ) {
 	/* wait until UART is ready to send */
-	while( !(inb(UART_LSR) && 0x20) );
+	while( !(inb(UART_LSR) & 0x20) );
 	/* send the character */
 	outb(UART_RBR, c);
 }

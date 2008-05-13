@@ -58,7 +58,8 @@ clean:
 dep: $(DEPS)
 
 monitor.bin: monitor.tmp
-	dd if=$< of=$@ bs=$(IMAGE_SIZE) count=1 conv=sync
+#	dd if=$< of=$@ bs=$(IMAGE_SIZE) count=1 conv=sync
+	cp monitor.tmp monitor.bin
 
 monitor.tmp: monitor.ihx
 	$(HEX2BIN) $(H2BFLAGS) -e tmp $< | grep 'address'

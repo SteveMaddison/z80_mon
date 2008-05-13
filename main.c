@@ -125,6 +125,7 @@ int main() {
 					done = 1;
 					break;
 				case '\b':
+				case 0x7f:
 					if( mode == MODE_ADDR || mode == MODE_PORT ) {
 						addr--;
 						con_crlf();
@@ -142,13 +143,14 @@ int main() {
 					else {
 						if( pos > &cli_buffer[0] ) {
 							*pos--;
-							con_putc(c);
+							con_putc('\b');
 							con_putc(' ');
-							con_putc(c);
+							con_putc('\b');
 						}
 					}
 					break;
 				case '\n':
+				case '\r':
 					*pos++ = 0;
 					con_crlf();
 					if( mode == MODE_ADDR || mode == MODE_PORT ) {
