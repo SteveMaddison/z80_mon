@@ -10,7 +10,7 @@
 _boot::
 	di		; disable interrupts
 	
-	;push	iy	; if we got here by means of a reset, push all registers
+	push	iy	; if we got here by means of a reset, push all registers
 	push	ix	; to the stack in case we want to examine them later.
 	push	hl
 	push	de
